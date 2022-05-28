@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:my_todo_app/main.dart';
 
-Widget homePageAppBar() {
+PreferredSizeWidget homePageAppBar() {
   return AppBar(
     leading: GestureDetector(
-      onTap: () => {},
+      onTap: () => themeService.switchTheme(),
       child: const Icon(Icons.nightlight_round, size: 20,),
     ),
+    actions: const [
+      Icon(Icons.person, size: 20,)
+    ],
   );
 }
