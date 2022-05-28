@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_todo_app/services/notification_service.dart';
 import 'package:my_todo_app/widgets/home_page_app_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,6 +10,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  late NotificationService notificationService;
+
+  @override
+  void initState() {
+    super.initState();
+    notificationService = NotificationService();
+    notificationService.initializeNotification();
+    notificationService.requestIOSPermissions();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
