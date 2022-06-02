@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class NotificationService{
   FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   initializeNotification() async {
+    tz.initializeTimeZones();
+
     final IOSInitializationSettings initializationSettingsIOS
     = IOSInitializationSettings(
       requestAlertPermission: false,
@@ -43,6 +47,7 @@ class NotificationService{
         "channelId", "channelName",
         importance: Importance.max,
         priority: Priority.high,
+        playSound: true,
         icon: "cloud_icon");
 
     var iosPlatformChannelSpecifics = const IOSNotificationDetails();
@@ -55,6 +60,16 @@ class NotificationService{
         0,
         title, body,
         platformChannelSpecifics, payload: "Default_Sound");
+  }
+
+  scheduledNotification() async {
+    notificationsPlugin.zonedSchedule(
+        0, "scheduled title", "theme changed 5 seconds ago",
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        const NotificationDetails(android: AndroidNotificationDetails(
+          "channelId", "channelName",)),
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true);
   }
   
   Future selectNotification(String? payLoad) async{

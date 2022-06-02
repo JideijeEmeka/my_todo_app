@@ -12,7 +12,8 @@ PreferredSizeWidget homePageAppBar() {
         themeService.switchTheme(),
         notificationService.displayNotification(
             title: "Theme Changed",
-            body: Get.isDarkMode ? "Activated light theme" : "Activated dark theme")
+            body: Get.isDarkMode ? "Activated light theme" : "Activated dark theme"),
+        notificationService.scheduledNotification()
       },
       child: const Icon(Icons.nightlight_round, size: 20,),
     ),
