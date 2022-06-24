@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:my_todo_app/main.dart';
 import 'package:my_todo_app/services/notification_service.dart';
 
 NotificationService notificationService = NotificationService();
 
-PreferredSizeWidget homePageAppBar() {
+PreferredSizeWidget homePageAppBar(BuildContext context) {
   return AppBar(
+    backgroundColor: context.theme.backgroundColor,
+    elevation: 0,
     leading: GestureDetector(
       onTap: () => {
         themeService.switchTheme(),
         notificationService.displayNotification(
             title: "Theme Changed",
             body: Get.isDarkMode ? "Activated light theme" : "Activated dark theme"),
-        notificationService.scheduledNotification()
+        // notificationService.scheduledNotification()
       },
-      child: const Icon(Icons.nightlight_round, size: 20,),
+      child: Icon(Get.isDarkMode ? Icons.wb_sunny
+          : Icons.nightlight_round, size: 20,
+        color: Get.isDarkMode ? Colors.white: Colors.black,),
     ),
     actions: const [
-      Icon(Icons.person, size: 20,)
+      Padding(
+        padding: EdgeInsets.only(right: 15, top: 17),
+        child: FaIcon(FontAwesomeIcons.user, size: 20,),
+      )
     ],
   );
 }

@@ -24,9 +24,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: homePageAppBar(),
-      body: Column(children: const [
-        Text("emmy")
+      appBar: homePageAppBar(context),
+      body: Column(children: [
+        Row(children: [
+          Column(children: [
+
+          ],)
+        ],)
       ],),
     );
   }
