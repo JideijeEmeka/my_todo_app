@@ -40,6 +40,7 @@ class NotificationService{
     );
   }
 
+  ///Display Notification
   displayNotification({required String title, required String body}) async {
     debugPrint("doing test");
 
@@ -62,15 +63,16 @@ class NotificationService{
         platformChannelSpecifics, payload: "Default_Sound");
   }
 
-  scheduledNotification() async {
-    notificationsPlugin.zonedSchedule(
-        0, "scheduled title", "theme changed 5 seconds ago",
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-        const NotificationDetails(android: AndroidNotificationDetails(
-          "channelId", "channelName",)),
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
-  }
+  /// Scheduled Notification
+  // scheduledNotification() async {
+  //   notificationsPlugin.zonedSchedule(
+  //       0, "scheduled title", "theme changed 5 seconds ago",
+  //       tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+  //       const NotificationDetails(android: AndroidNotificationDetails(
+  //         "channelId", "channelName",)),
+  //       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+  //       androidAllowWhileIdle: true);
+  // }
   
   Future selectNotification(String? payLoad) async{
     if(payLoad != null) {
