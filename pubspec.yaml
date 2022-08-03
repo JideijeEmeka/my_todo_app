@@ -16,6 +16,8 @@ dependencies:
   get_storage:
   flutter_local_notifications:
   flutter_native_timezone:
+  font_awesome_flutter: ^10.1.0
+  intl:
 
 dev_dependencies:
   flutter_test:
