@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:my_todo_app/main.dart';
 import 'package:my_todo_app/services/notification_service.dart';
+import 'package:my_todo_app/themes/app_colors.dart';
 
 NotificationService notificationService = NotificationService();
 
@@ -19,13 +20,14 @@ PreferredSizeWidget homePageAppBar(BuildContext context) {
         // notificationService.scheduledNotification()
       },
       child: Icon(Get.isDarkMode ? Icons.wb_sunny
-          : Icons.nightlight_round, size: 20,
+          : Icons.nightlight_round, size: 23,
         color: Get.isDarkMode ? Colors.white: Colors.black,),
     ),
-    actions: const [
+    actions: [
       Padding(
-        padding: EdgeInsets.only(right: 15, top: 17),
-        child: FaIcon(FontAwesomeIcons.user, size: 20,),
+        padding: const EdgeInsets.only(right: 15, top: 17),
+        child: FaIcon(FontAwesomeIcons.user, size: 23,
+        color: Get.isDarkMode ? whiteColor : blackColor,),
       )
     ],
   );
