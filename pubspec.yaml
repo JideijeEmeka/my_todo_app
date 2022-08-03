@@ -20,7 +20,7 @@ dependencies:
   google_fonts: ^3.0.1
   intl:
   date_picker_timeline:
-
+  sqflite:
 
 dev_dependencies:
   flutter_test:
