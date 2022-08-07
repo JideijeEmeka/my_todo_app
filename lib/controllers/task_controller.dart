@@ -7,7 +7,7 @@ class TaskController extends GetxController {
     super.onReady();
   }
 
-  Future<void> addTask({Task? task}) {
+  Future<void>? addTask({Task? task}) {
     return null;
   }
 }
