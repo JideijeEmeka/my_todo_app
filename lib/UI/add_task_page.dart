@@ -87,6 +87,7 @@ class _AddTaskState extends State<AddTask> {
   _validateDate() {
     if(titleController.text.isNotEmpty && noteController.text.isNotEmpty) {
       ///Add to database
+      _addTaskToDatabase();
       Get.back();
     }else {
       if(titleController.text.isEmpty || noteController.text.isEmpty) {
@@ -99,8 +100,8 @@ class _AddTaskState extends State<AddTask> {
     }
   }
 
-  _addTaskToDatabase() {
-    _taskController.addTask(
+  _addTaskToDatabase() async {
+    int? value = await _taskController.addTask(
       task: Task(
           title: titleController.text,
           note: noteController.text,
@@ -113,6 +114,7 @@ class _AddTaskState extends State<AddTask> {
           repeat: _selectedRepeat
       )
     );
+    print('My id is: $value');
   }
 
   @override
