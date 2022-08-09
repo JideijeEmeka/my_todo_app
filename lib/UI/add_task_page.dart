@@ -3,12 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
-import 'package:my_todo_app/main.dart';
 import 'package:my_todo_app/models/task.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 import 'package:my_todo_app/themes/app_theme.dart';
 import 'package:my_todo_app/widgets/button_widget.dart';
-import 'package:my_todo_app/widgets/home_page_app_bar.dart';
 import 'package:my_todo_app/widgets/input_field.dart';
 
 class AddTask extends StatefulWidget {
@@ -114,7 +112,7 @@ class _AddTaskState extends State<AddTask> {
           repeat: _selectedRepeat
       )
     );
-    print('My id is: $value');
+    debugPrint('My id is: $value');
   }
 
   @override
