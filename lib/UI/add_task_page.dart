@@ -3,12 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
-import 'package:my_todo_app/main.dart';
 import 'package:my_todo_app/models/task.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 import 'package:my_todo_app/themes/app_theme.dart';
 import 'package:my_todo_app/widgets/button_widget.dart';
-import 'package:my_todo_app/widgets/home_page_app_bar.dart';
 import 'package:my_todo_app/widgets/input_field.dart';
 
 class AddTask extends StatefulWidget {
@@ -87,6 +85,7 @@ class _AddTaskState extends State<AddTask> {
   _validateDate() {
     if(titleController.text.isNotEmpty && noteController.text.isNotEmpty) {
       ///Add to database
+      _addTaskToDatabase();
       Get.back();
     }else {
       if(titleController.text.isEmpty || noteController.text.isEmpty) {
@@ -99,8 +98,8 @@ class _AddTaskState extends State<AddTask> {
     }
   }
 
-  _addTaskToDatabase() {
-    _taskController.addTask(
+  _addTaskToDatabase() async {
+    int? value = await _taskController.addTask(
       task: Task(
           title: titleController.text,
           note: noteController.text,
@@ -113,6 +112,7 @@ class _AddTaskState extends State<AddTask> {
           repeat: _selectedRepeat
       )
     );
+    debugPrint('My id is: $value');
   }
 
   @override
