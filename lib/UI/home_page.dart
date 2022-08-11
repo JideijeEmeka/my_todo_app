@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:my_todo_app/services/notification_service.dart';
 import 'package:my_todo_app/widgets/date_picker_widget.dart';
 import 'package:my_todo_app/widgets/home_page_app_bar.dart';
+import 'package:my_todo_app/widgets/show_tasks_widget.dart';
 import 'package:my_todo_app/widgets/task_bar_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,6 +34,8 @@ class _HomePageState extends State<HomePage> {
       body: Column(children: [
         taskBar(),
         datePicker(),
+        const SizedBox(height: 10,),
+        showTasks(),
       ],),
     );
   }
