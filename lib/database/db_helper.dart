@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_todo_app/models/task.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 class DbHelper {
   static Database? _database;
@@ -38,5 +37,10 @@ class DbHelper {
   static Future<int> insert(Task? task) async {
     debugPrint('insert function called');
     return await _database?.insert(_tableName, task!.toJson()) ?? 1;
+  }
+
+  static Future<List<Map<String, dynamic>>?> query() async {
+    debugPrint('query function called');
+    return await _database?.query(_tableName);
   }
 }
