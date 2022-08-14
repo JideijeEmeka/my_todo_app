@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
+import 'package:my_todo_app/UI/notified_page.dart';
 import 'package:my_todo_app/models/task.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -63,7 +64,7 @@ class NotificationService{
     await notificationsPlugin.show(
         0,
         title, body,
-        platformChannelSpecifics, payload: "Default_Sound");
+        platformChannelSpecifics, payload: title);
   }
 
   /// Scheduled Notification
@@ -76,7 +77,7 @@ class NotificationService{
           "channelId", "channelName", channelDescription: "Channel description")),
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,
-        payload: "{$task.title}|""{$task.note}|",
+        payload: "${task.title}|""${task.note}|",
         androidAllowWhileIdle: true);
   }
 
@@ -102,7 +103,11 @@ class NotificationService{
     }else{
       debugPrint("Notification Done");
     }
-    Get.to(() => Container(color: Colors.white,));
+    if(payLoad == "Theme Changed") {
+      debugPrint('Nothing to navigate');
+    }else {
+      Get.to(() => NotifiedPage(label: payLoad,));
+    }
   }
 
   Future onDidReceiveLocalNotification(int id,
