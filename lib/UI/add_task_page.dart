@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:my_todo_app/UI/notified_page.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
 import 'package:my_todo_app/models/task.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
@@ -61,9 +63,7 @@ class _AddTaskState extends State<AddTask> {
   _getTimeFromUser({required bool isStartTime}) async {
     var pickedTime = await _showTimePicker();
     String formattedTime = pickedTime.format(context);
-    if(pickedTime == null) {
-      debugPrint('Time Cancelled');
-    }else if(isStartTime == true) {
+    if(isStartTime == true) {
       setState(() {
         _startTime = formattedTime;
       });
@@ -71,11 +71,19 @@ class _AddTaskState extends State<AddTask> {
       setState(() {
         _endTime = formattedTime;
       });
+    }else if(pickedTime == null) {
+      debugPrint('Time Cancelled');
     }
   }
 
-  _showTimePicker(){
+  _showTimePicker() {
     return showTimePicker(context: context,
+        builder: (context, Widget? child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: child!,
+          );
+        },
         initialEntryMode: TimePickerEntryMode.input,
         initialTime: TimeOfDay(
             hour: int.parse(_startTime.split(':')[0]),
@@ -214,6 +222,7 @@ class _AddTaskState extends State<AddTask> {
                   _colorPallet(),
                   MyButton(label: 'Create Task', onPressed: () {
                     _validateDate();
+                    // Get.to(const NotifiedPage(label: 'Obi'));
                   })
                 ],
               )
