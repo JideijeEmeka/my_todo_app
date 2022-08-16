@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         _datePicker(),
         const SizedBox(height: 10,),
         _showTasks(),
-        _developerInfo()
+        _developerInfo(),
       ],),
     );
   }
