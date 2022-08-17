@@ -43,11 +43,12 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: context.theme.backgroundColor,
       appBar: homePageAppBar(context),
       body: Column(children: [
+        const SizedBox(height: 10,),
         _taskBar(),
         _datePicker(),
         const SizedBox(height: 10,),
         _showTasks(),
-        _developerInfo()
+        _developerInfo(),
       ],),
     );
   }
