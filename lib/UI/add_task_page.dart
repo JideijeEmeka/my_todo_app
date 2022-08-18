@@ -91,12 +91,14 @@ class _AddTaskState extends State<AddTask> {
   }
 
   _validateDate() {
-    if(titleController.text.isNotEmpty && noteController.text.isNotEmpty) {
+    if(titleController.text.isNotEmpty
+        && noteController.text.isNotEmpty) {
       ///Add to database
       _addTaskToDatabase();
       Get.back();
     }else {
-      if(titleController.text.isEmpty || noteController.text.isEmpty) {
+      if(titleController.text.isEmpty
+          || noteController.text.isEmpty) {
         Get.snackbar('Required', 'All fields are required!',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: whiteColor,
