@@ -34,22 +34,24 @@ class _HomePageState extends State<HomePage> {
     notificationService.initializeNotification();
     notificationService.requestIOSPermissions();
     _selectedDate = DateTime.now();
+    _showTasks();
   }
 
   @override
   Widget build(BuildContext context) {
+    _showTasks();
 
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: homePageAppBar(context),
       body: Column(children: [
-        const SizedBox(height: 10,),
-        _taskBar(),
-        _datePicker(),
-        const SizedBox(height: 10,),
-        _showTasks(),
-        _developerInfo(),
-      ],),
+          const SizedBox(height: 10,),
+          _taskBar(),
+          _datePicker(),
+          const SizedBox(height: 10,),
+          _showTasks(),
+          //_developerInfo(),
+        ],),
     );
   }
 
@@ -114,7 +116,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
   _showTasks() {
-    return Expanded(child: Obx(() => ListView.builder(
+    return _taskController.taskList.isEmpty ? _showNoTasks() :
+      Expanded(child: Obx(() => ListView.builder(
         itemCount: _taskController.taskList.length,
         itemBuilder: (context, index) {
           Task task = _taskController.taskList[index];
@@ -125,7 +128,8 @@ class _HomePageState extends State<HomePage> {
             notificationService.scheduledNotification(
                 int.parse(myTime.toString().split(":")[0]),
                 int.parse(myTime.toString().split(":")[1]), task);
-            return AnimationConfiguration.staggeredList(
+            return _taskController.taskList.isEmpty ? _showNoTasks() :
+              AnimationConfiguration.staggeredList(
                 position: index,
                 child: SlideAnimation(
                     child: FadeInAnimation(
@@ -265,6 +269,29 @@ class _HomePageState extends State<HomePage> {
             return Container();
           }
         })));
+  }
+  _showNoTasks() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 230),
+      child: Column(
+        children: [
+          Icon(Icons.task, size: 80,
+            color: Get.isDarkMode ? bluishColor.withOpacity(0.8) : bluishColor,),
+          Text('You do not have any tasks yet!',
+            style: GoogleFonts.portLligatSlab(textStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 17,
+                color: Get.isDarkMode ? Colors.grey[400] : Colors.grey
+            )),),
+          Text('Add new tasks to make your days productive.',
+            style: GoogleFonts.portLligatSlab(textStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 17,
+                color: Get.isDarkMode ? Colors.grey[400] : Colors.grey
+            )),)
+        ],
+      ),
+    );
   }
   _developerInfo() {
     return Column(
