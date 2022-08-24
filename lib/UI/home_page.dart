@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:my_todo_app/UI/add_task_page.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
 import 'package:my_todo_app/models/task.dart';
-import 'package:my_todo_app/services/notification_service.dart';
+import 'package:my_todo_app/services/notification_service1.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 import 'package:my_todo_app/themes/app_theme.dart';
 import 'package:my_todo_app/widgets/button_widget.dart';
@@ -34,13 +34,10 @@ class _HomePageState extends State<HomePage> {
     notificationService.initializeNotification();
     notificationService.requestIOSPermissions();
     _selectedDate = DateTime.now();
-    _showTasks();
   }
 
   @override
   Widget build(BuildContext context) {
-    _showTasks();
-
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: homePageAppBar(context),
@@ -48,8 +45,9 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 10,),
           _taskBar(),
           _datePicker(),
-          const SizedBox(height: 10,),
+          const SizedBox(height: 15,),
           _showTasks(),
+          // _showNoTasks(),
           //_developerInfo(),
         ],),
     );
@@ -121,15 +119,13 @@ class _HomePageState extends State<HomePage> {
         itemCount: _taskController.taskList.length,
         itemBuilder: (context, index) {
           Task task = _taskController.taskList[index];
-          //print(task.toJson());
           if(task.repeat == 'Daily') {
             DateTime date = DateFormat.jm().parse(task.startTime.toString());
             var myTime = DateFormat("HH:mm").format(date);
-            notificationService.scheduledNotification(
-                int.parse(myTime.toString().split(":")[0]),
-                int.parse(myTime.toString().split(":")[1]), task);
-            return _taskController.taskList.isEmpty ? _showNoTasks() :
-              AnimationConfiguration.staggeredList(
+            // notificationService.scheduledNotification(
+            //     int.parse(myTime.toString().split(":")[0]),
+            //     int.parse(myTime.toString().split(":")[1]), task);
+            return AnimationConfiguration.staggeredList(
                 position: index,
                 child: SlideAnimation(
                     child: FadeInAnimation(
@@ -139,22 +135,26 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 Get.bottomSheet(
                                     Container(
-                                      padding: const EdgeInsets.only(top: 4),
+                                      padding: const EdgeInsets.only(top: 1),
                                       height: task.isCompleted == 1
                                           ? MediaQuery.of(context).size.height * 0.25
-                                          : MediaQuery.of(context).size.height * 0.35,
+                                          : MediaQuery.of(context).size.height * 0.30,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(25),
+                                          topRight: Radius.circular(25),
+                                        )
+                                      ),
                                       color: Get.isDarkMode ? darkGreyColor : whiteColor,
                                       child: Column(
                                         children: [
                                           Container(
-                                            height: 6,
-                                            width: 120,
+                                            height: 6, width: 120,
                                             decoration: BoxDecoration(
+                                                shape: BoxShape.rectangle,
                                                 borderRadius: BorderRadius.circular(10),
-                                                color: Get.isDarkMode ? Colors.grey[600] : Colors.grey[300]
-                                            ),
-                                          ),
-                                          const Spacer(),
+                                                color: Get.isDarkMode ? Colors.grey[600]
+                                                    : Colors.grey[300])),
                                           task.isCompleted == 1 ? Container()
                                               : _bottomButton(
                                               label: 'Task Completed',
@@ -164,25 +164,21 @@ class _HomePageState extends State<HomePage> {
                                                 Get.back()
                                               }, color: primaryColor,
                                               context: context),
-                                          const SizedBox(
-                                            height: 2,
-                                          ),
+                                          const SizedBox(height: 2),
                                           _bottomButton(
                                               label: 'Delete Task',
                                               onTap: () => {
                                                 _taskController.delete(task),
+                                                setState(() {}),
                                                 Get.back()
                                               },
                                               color: Colors.red[300]!,
                                               context: context),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
+                                          const SizedBox(height: 10),
                                           _bottomButton(
                                               label: 'Close',
-                                              onTap: () => {
-                                                Get.back()
-                                              }, color: Colors.red[300]!,
+                                              onTap: () => Get.back(),
+                                              color: Colors.red[300]!,
                                               isClosed: true,
                                               context: context),
                                           const SizedBox(
@@ -190,7 +186,8 @@ class _HomePageState extends State<HomePage> {
                                           )
                                         ],
                                       ),
-                                    ));
+                                    ),
+                                );
                               },
                               child: TaskTile(task: task),
                             )
