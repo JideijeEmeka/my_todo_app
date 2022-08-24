@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:my_todo_app/UI/notified_page.dart';
+import 'package:my_todo_app/constants/constants.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
 import 'package:my_todo_app/models/task.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
@@ -132,19 +133,19 @@ class _AddTaskState extends State<AddTask> {
       appBar: AppBar(
         backgroundColor: context.theme.backgroundColor,
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () => {
-            Get.back()
-          },
-          child: Icon(Icons.arrow_back_ios, size: 23,
-            color: Get.isDarkMode ? Colors.white: Colors.black,),
-        ),
-        actions: [
+        leading: IconButton(onPressed: () => Get.back(),
+            padding: const EdgeInsets.only(left: 10, top: 10),
+            icon: const FaIcon(FontAwesomeIcons.backward, size: 23,
+              color: bluishColor,)),
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 15, top: 17),
-            child: FaIcon(FontAwesomeIcons.user, size: 23,
-              color: Get.isDarkMode ? whiteColor : blackColor,),
-          )
+            padding: EdgeInsets.only(right: 20, top: 15),
+            child: CircleAvatar(
+                radius: 19,
+                backgroundColor: bluishColor,
+                backgroundImage: NetworkImage(profilePicUrl),
+              ),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -153,6 +154,7 @@ class _AddTaskState extends State<AddTask> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 10,),
               Text('Add Task', style: headingStyle,),
               MyInputField(hint: 'Enter title here.', title: 'Title',
                 controller: titleController,),
