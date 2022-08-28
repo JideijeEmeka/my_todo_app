@@ -4,10 +4,11 @@ import 'package:get/get.dart';
 import 'package:my_todo_app/UI/notified_page.dart';
 import 'package:my_todo_app/constants/constants.dart';
 import 'package:my_todo_app/main.dart';
+import 'package:my_todo_app/services/notification_service.dart';
 import 'package:my_todo_app/services/notification_service1.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 
-NotificationService notificationService = NotificationService();
+NotificationService _notificationService = NotificationService();
 
 PreferredSizeWidget homePageAppBar(BuildContext context) {
   return AppBar(
@@ -16,9 +17,16 @@ PreferredSizeWidget homePageAppBar(BuildContext context) {
     leading: GestureDetector(
       onTap: () => {
         themeService.switchTheme(),
-        notificationService.displayNotification(
-            title: "Theme Changed",
-            body: Get.isDarkMode ? "Activated light theme" : "Activated dark theme"),
+        /// Show Notification
+        _notificationService.showNotification(
+          title: "You changed your theme",
+          body: Get.isDarkMode ? "Light theme activated!!" : "Dark theme activated!!",
+          payload: "You changed your theme"
+        ),
+        debugPrint('Theme Changed')
+        // notificationService.displayNotification(
+        //     title: "Theme Changed",
+        //     body: Get.isDarkMode ? "Activated light theme" : "Activated dark theme"),
         // notificationService.scheduledNotification()
       },
       child: Padding(

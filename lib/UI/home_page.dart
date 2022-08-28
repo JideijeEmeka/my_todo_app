@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_todo_app/UI/add_task_page.dart';
+import 'package:my_todo_app/UI/notified_page.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
 import 'package:my_todo_app/models/task.dart';
+import 'package:my_todo_app/services/notification_service.dart';
 import 'package:my_todo_app/services/notification_service1.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 import 'package:my_todo_app/themes/app_theme.dart';
@@ -31,9 +33,23 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     notificationService = NotificationService();
-    notificationService.initializeNotification();
-    notificationService.requestIOSPermissions();
+    notificationService.init();
+    notificationService.setOnNotificationReceive(onNotificationReceive);
+    notificationService.setOnNotificationClick(onNotificationClick);
     _selectedDate = DateTime.now();
+  }
+
+  onNotificationReceive(ReceiveNotification notification) {
+    print('Notification Received: ${notification.id}');
+  }
+
+  onNotificationClick(String? payload) {
+    if(payload != null && payload == "You changed your theme") {
+      debugPrint("Notification payload: $payload");
+      debugPrint('Nothing to navigate');
+    }else {
+      Get.to(NotifiedPage(label: payload));
+    }
   }
 
   @override
@@ -41,15 +57,21 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: homePageAppBar(context),
-      body: Column(children: [
-          const SizedBox(height: 10,),
-          _taskBar(),
-          _datePicker(),
-          const SizedBox(height: 15,),
-          _showTasks(),
-          // _showNoTasks(),
-          //_developerInfo(),
-        ],),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(children: [
+              const SizedBox(height: 10,),
+              _taskBar(),
+              _datePicker(),
+              const SizedBox(height: 15,),
+              _showTasks(),
+              // _showNoTasks(),
+              //_developerInfo(),
+            ],),
+        ),
+      ),
     );
   }
 
@@ -122,9 +144,11 @@ class _HomePageState extends State<HomePage> {
           if(task.repeat == 'Daily') {
             DateTime date = DateFormat.jm().parse(task.startTime.toString());
             var myTime = DateFormat("HH:mm").format(date);
-            // notificationService.scheduledNotification(
-            //     int.parse(myTime.toString().split(":")[0]),
-            //     int.parse(myTime.toString().split(":")[1]), task);
+            notificationService.scheduleNotification(
+              hour: int.parse(myTime.toString().split(":")[0]),
+              minutes: int.parse(myTime.toString().split(":")[1]),
+              task: task
+            );
             return AnimationConfiguration.staggeredList(
                 position: index,
                 child: SlideAnimation(
@@ -137,15 +161,15 @@ class _HomePageState extends State<HomePage> {
                                     Container(
                                       padding: const EdgeInsets.only(top: 1),
                                       height: task.isCompleted == 1
-                                          ? MediaQuery.of(context).size.height * 0.25
-                                          : MediaQuery.of(context).size.height * 0.30,
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.only(
+                                          ? MediaQuery.of(context).size.height * 0.30
+                                          : MediaQuery.of(context).size.height * 0.37,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(25),
                                           topRight: Radius.circular(25),
-                                        )
+                                        ),
+                                        color: Get.isDarkMode ? darkGreyColor : whiteColor,
                                       ),
-                                      color: Get.isDarkMode ? darkGreyColor : whiteColor,
                                       child: Column(
                                         children: [
                                           Container(
@@ -155,6 +179,7 @@ class _HomePageState extends State<HomePage> {
                                                 borderRadius: BorderRadius.circular(10),
                                                 color: Get.isDarkMode ? Colors.grey[600]
                                                     : Colors.grey[300])),
+                                          const SizedBox(height: 20),
                                           task.isCompleted == 1 ? Container()
                                               : _bottomButton(
                                               label: 'Task Completed',
@@ -269,7 +294,7 @@ class _HomePageState extends State<HomePage> {
   }
   _showNoTasks() {
     return Padding(
-      padding: const EdgeInsets.only(top: 230),
+      padding: const EdgeInsets.only(top: 200),
       child: Column(
         children: [
           Icon(Icons.task, size: 80,
