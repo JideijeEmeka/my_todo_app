@@ -86,7 +86,7 @@ class NotificationService {
   }
 
   scheduleNotification({required int hour,
-    required int minutes, required Task task}) {
+      required int minutes, required Task task}) {
     flutterLocalNotificationsPlugin.zonedSchedule(
         task.id!,
         task.title,
@@ -96,7 +96,7 @@ class NotificationService {
         const NotificationDetails(
             android: AndroidNotificationDetails(
             'CHANNEL_ID_1', 'CHANNEL_NAME_1',
-              channelDescription: 'CHANNEL_DESCRIPTION_1',
+            channelDescription: 'CHANNEL_DESCRIPTION_1',
             importance: Importance.high,
             priority: Priority.high,
             playSound: true,
@@ -106,7 +106,8 @@ class NotificationService {
             sound: RawResourceAndroidNotificationSound('notification_sound')),
         iOS: IOSNotificationDetails(sound: 'notification_sound.mp3')),
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-        payload: 'Scheduled Payload',
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: "${task.title}|""${task.note}|""${task.date}|""${task.startTime}|",
         androidAllowWhileIdle: true);
   }
 
