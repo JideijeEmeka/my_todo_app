@@ -88,7 +88,7 @@ class NotifiedPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: Text(label.toString().split("|")[0],
+                        child: Text(label.toString().split("|")[1],
                           style: TextStyle(
                             fontSize: 17,
                             color: whiteColor.withOpacity(0.7),),),
@@ -106,7 +106,7 @@ class NotifiedPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: Text(label.toString().split("|")[0],
+                        child: Text(label.toString().split("|")[2],
                           style: TextStyle(
                             fontSize: 17,
                             color: whiteColor.withOpacity(0.7),),),
@@ -124,7 +124,7 @@ class NotifiedPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: Text(label.toString().split("|")[0],
+                        child: Text(label.toString().split("|")[3],
                           style: TextStyle(
                             fontSize: 17,
                             color: whiteColor.withOpacity(0.7),),),
