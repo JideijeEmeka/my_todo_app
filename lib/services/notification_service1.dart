@@ -7,12 +7,11 @@ import 'package:my_todo_app/models/task.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-class NotificationService{
+class NotificationService1{
   FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   initializeNotification() async {
-    //tz.initializeTimeZones();
-    // _configureLocalTimeZone();
+    _configureLocalTimeZone();
 
     final IOSInitializationSettings initializationSettingsIOS
     = IOSInitializationSettings(
