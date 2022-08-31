@@ -7,7 +7,7 @@ import 'package:my_todo_app/models/task.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-class NotificationService1{
+class NotificationService1{ 
   FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   initializeNotification() async {
