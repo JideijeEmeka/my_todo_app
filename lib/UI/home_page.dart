@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
           MyButton(label: '+ Add task', onPressed: () async =>
           {
             await Get.to(const AddTask()),
-            _taskController.getTasks()
+            _taskController.getTasks() 
           })
         ],),
     );
