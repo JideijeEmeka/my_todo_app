@@ -62,10 +62,10 @@ class _HomePageState extends State<HomePage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(children: [
-              const SizedBox(height: 10,),
+              const SizedBox(height: 10),
               _taskBar(),
               _datePicker(),
-              const SizedBox(height: 15,),
+              const SizedBox(height: 15),
               _showTasks(),
               // _showNoTasks(),
               //_developerInfo(),
@@ -135,18 +135,17 @@ class _HomePageState extends State<HomePage> {
         ],),
     );
   }
-  _showTasks() {
-    return _taskController.taskList.isEmpty ? _showNoTasks() :
-      Expanded(child: Obx(() => ListView.builder(
+  _showTasks() { 
+    return Expanded(child: Obx(() => ListView.builder(
         itemCount: _taskController.taskList.length,
         itemBuilder: (context, index) {
           Task task = _taskController.taskList[index];
           if(task.repeat == 'Daily') {
-            DateTime date = DateFormat.jm().parse(task.startTime.toString());
-            var myTime = DateFormat("HH:mm").format(date);
+            var date = DateFormat.jm().parse(task.startTime!);
+            var myTime = DateFormat('HH:mm a').format(date);
             notificationService.scheduleNotification(
-              hour: int.parse(myTime.toString().split(":")[0]),
-              minutes: int.parse(myTime.toString().split(":")[1]),
+              hour: int.tryParse(myTime.toString().split(':')[0]) ?? 0,
+              minutes: int.tryParse(myTime.toString().split(':')[1].substring(0, 2)) ?? 0,
               task: task
             );
             return AnimationConfiguration.staggeredList(
