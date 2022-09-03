@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
         ],),
     );
   }
-  _showTasks() { 
+  _showTasks() {    
     return Expanded(child: Obx(() => ListView.builder(
         itemCount: _taskController.taskList.length,
         itemBuilder: (context, index) {

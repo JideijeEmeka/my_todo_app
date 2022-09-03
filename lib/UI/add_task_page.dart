@@ -79,16 +79,16 @@ class _AddTaskState extends State<AddTask> {
 
   _showTimePicker() {
     return showTimePicker(context: context,
-        builder: (context, Widget? child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-            child: child!,
-          );
-        },
+        // builder: (context, Widget? child) {
+        //   return MediaQuery(
+        //     data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+        //     child: child!,
+        //   );
+        // },
         initialEntryMode: TimePickerEntryMode.input,
         initialTime: TimeOfDay(
-            hour: int.parse(_startTime.split(':')[0]),
-            minute: int.parse(_startTime.split(':')[1].split(' ')[0])));
+            hour: int.tryParse(_startTime.split(':')[0]) ?? 0,
+            minute: int.tryParse(_startTime.split(':')[1].split(' ')[0].substring(0, 2)) ?? 0));
   }
 
   _validateDate() {
