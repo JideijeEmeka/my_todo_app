@@ -9,7 +9,6 @@ import 'package:my_todo_app/UI/notified_page.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
 import 'package:my_todo_app/models/task.dart';
 import 'package:my_todo_app/services/notification_service.dart';
-import 'package:my_todo_app/services/notification_service1.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 import 'package:my_todo_app/themes/app_theme.dart';
 import 'package:my_todo_app/widgets/button_widget.dart';

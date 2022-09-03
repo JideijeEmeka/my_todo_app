@@ -5,7 +5,6 @@ import 'package:my_todo_app/UI/notified_page.dart';
 import 'package:my_todo_app/constants/constants.dart';
 import 'package:my_todo_app/main.dart';
 import 'package:my_todo_app/services/notification_service.dart';
-import 'package:my_todo_app/services/notification_service1.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 
 NotificationService _notificationService = NotificationService();
