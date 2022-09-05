@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -10,7 +9,7 @@ import 'package:timezone/timezone.dart' as tz;
 class NotificationService {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin
       = FlutterLocalNotificationsPlugin();
-  var initSetting;
+  dynamic initSetting;
   BehaviorSubject<ReceiveNotification> get didReceiveLocalNotificationSubject =>
     BehaviorSubject<ReceiveNotification>();
 

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:my_todo_app/UI/notified_page.dart';
 import 'package:my_todo_app/constants/constants.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
 import 'package:my_todo_app/models/task.dart';

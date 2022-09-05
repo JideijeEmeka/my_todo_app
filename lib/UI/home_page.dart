@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   onNotificationReceive(ReceiveNotification notification) {
-    print('Notification Received: ${notification.id}');
+    debugPrint('Notification Received: ${notification.id}');
   }
 
   onNotificationClick(String? payload) {
@@ -314,30 +314,30 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  _developerInfo() {
-    return Column(
-      children: [
-        Text('Developed by Emmy',
-        style: GoogleFonts.amita(
-          textStyle: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1
-          )
-        ),),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Text('+2348140087091',
-          style: GoogleFonts.amita(
-            textStyle: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1
-          ),)),
-        )
-      ],
-    );
-  }
+  // _developerInfo() {
+  //   return Column(
+  //     children: [
+  //       Text('Developed by Emmy',
+  //       style: GoogleFonts.amita(
+  //         textStyle: const TextStyle(
+  //           fontSize: 20,
+  //           fontWeight: FontWeight.bold,
+  //           letterSpacing: 1
+  //         )
+  //       ),),
+  //       Padding(
+  //         padding: const EdgeInsets.only(bottom: 10),
+  //         child: Text('+2348140087091',
+  //         style: GoogleFonts.amita(
+  //           textStyle: const TextStyle(
+  //           fontSize: 15,
+  //           fontWeight: FontWeight.bold,
+  //           letterSpacing: 1
+  //         ),)),
+  //       )
+  //     ],
+  //   );
+  // }
 
   _bottomButton({
     required String label,
