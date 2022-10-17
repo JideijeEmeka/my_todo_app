@@ -141,11 +141,11 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           Task task = _taskController.taskList[index];
           if(task.repeat == 'Daily') {
-            DateTime date = DateFormat.jm().parse(task.startTime.toString());
+            DateTime date = DateFormat.jm().parse(task.startTime!.trim());
             var myTime = DateFormat("HH:mm").format(date);
             notificationService.scheduleNotification(
-              hour: int.parse(myTime.toString().split(":")[0]),
-              minutes: int.parse(myTime.toString().split(":")[1]),
+              hour: int.parse(myTime.trim().toString().split(":")[0]),
+              minutes: int.parse(myTime.trim().toString().split(":")[1]),
               task: task
             );
             return AnimationConfiguration.staggeredList(
