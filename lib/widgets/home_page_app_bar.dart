@@ -39,7 +39,7 @@ PreferredSizeWidget homePageAppBar(BuildContext context) {
       Padding(
         padding: const EdgeInsets.only(right: 20, top: 15),
         child: InkWell(
-          onTap: () => Get.to(const NotifiedPage(label: 'label')),
+          onTap: () => Get.to(() => const NotifiedPage(label: 'label')),
           child: const CircleAvatar(
             radius: 19,
             backgroundColor: bluishColor,

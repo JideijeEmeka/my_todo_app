@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:my_todo_app/UI/notified_page.dart';
 import 'package:my_todo_app/constants/constants.dart';
 import 'package:my_todo_app/controllers/task_controller.dart';
 import 'package:my_todo_app/models/task.dart';
@@ -44,6 +42,7 @@ class _AddTaskState extends State<AddTask> {
   ];
 
   int _selectedColor = 0;
+  bool isLoading = false;
 
   _getDateFromUser() async {
     DateTime? _pickerDate = await showDatePicker(
@@ -94,9 +93,21 @@ class _AddTaskState extends State<AddTask> {
   _validateDate() {
     if(titleController.text.isNotEmpty
         && noteController.text.isNotEmpty) {
-      ///Add to database
-      _addTaskToDatabase();
-      Get.back();
+      /// Add to database
+      setState(() {
+        isLoading = true;
+      });
+      Future.delayed(const Duration(seconds: 1), () => {
+        _addTaskToDatabase(),
+        _taskController.getTasks(),
+        _taskController.update(),
+        setState(() {}),
+      }).then((value) => {
+        setState(() {
+          isLoading = false;
+        }),
+      Get.back(),
+      });
     }else {
       if(titleController.text.isEmpty
           || noteController.text.isEmpty) {
@@ -123,7 +134,7 @@ class _AddTaskState extends State<AddTask> {
           repeat: _selectedRepeat
       )
     );
-    debugPrint('My id is: $value');
+    debugPrint('A new task added: $value');
   }
 
   @override
@@ -224,12 +235,15 @@ class _AddTaskState extends State<AddTask> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _colorPallet(),
-                  MyButton(label: 'Create Task', onPressed: () {
-                    _validateDate();
+                  isLoading ? const SizedBox(height: 30, width: 30,
+                      child: CircularProgressIndicator()) :
+                  MyButton(label: 'Create Task', onPressed: () => {
+                    _validateDate(),
                     // Get.to(const NotifiedPage(label: 'Obi'));
                   })
                 ],
-              )
+              ),
+              const SizedBox(height: 30,)
             ],
           ),
         ),
@@ -243,7 +257,7 @@ class _AddTaskState extends State<AddTask> {
         Text('Color', style: titleStyle,),
         const SizedBox(height: 8,),
         Wrap(
-          children: List<Widget>.generate(3, (index) {
+          children: List<Widget>.generate(5, (index) {
             return GestureDetector(
               onTap: () {
                 setState(() {
@@ -257,7 +271,9 @@ class _AddTaskState extends State<AddTask> {
                   radius: 14,
                   backgroundColor: index == 0 ? primaryColor
                       : index == 1 ? pinkishColor
-                      : yellowishColor,
+                      : index == 2 ? yellowishColor
+                      : index == 3 ? blackColor
+                      : purpleColor,
                   child: _selectedColor == index ? const Icon(Icons.done, size: 16,
                     color: whiteColor,) : Container(),
                 ),
