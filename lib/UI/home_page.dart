@@ -11,8 +11,10 @@ import 'package:my_todo_app/models/task.dart';
 import 'package:my_todo_app/services/notification_service.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 import 'package:my_todo_app/themes/app_theme.dart';
+import 'package:my_todo_app/widgets/bottom_button_widget.dart';
 import 'package:my_todo_app/widgets/button_widget.dart';
 import 'package:my_todo_app/widgets/home_page_app_bar.dart';
+import 'package:my_todo_app/widgets/show_no_tasks.dart';
 import 'package:my_todo_app/widgets/task_tile_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   onNotificationReceive(ReceiveNotification notification) {
-    print('Notification Received: ${notification.id}');
+    debugPrint('Notification Received: ${notification.id}');
   }
 
   onNotificationClick(String? payload) {
@@ -56,21 +58,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: homePageAppBar(context),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Column(children: [
+      body: Column(children: [
               const SizedBox(height: 10,),
               _taskBar(),
               _datePicker(),
-              const SizedBox(height: 15,),
-              _showTasks(),
-              // _showNoTasks(),
-              //_developerInfo(),
+              const SizedBox(height: 15),
+            Expanded(child: Obx(() => _showTasks())),
+          const SizedBox(height: 30,)
             ],),
-        ),
-      ),
     );
   }
 
@@ -135,235 +130,177 @@ class _HomePageState extends State<HomePage> {
     );
   }
   _showTasks() {
-    return _taskController.taskList.isEmpty ? _showNoTasks() :
-      Expanded(child: Obx(() => ListView.builder(
-        itemCount: _taskController.taskList.length,
-        itemBuilder: (context, index) {
-          Task task = _taskController.taskList[index];
-          if(task.repeat == 'Daily') {
-            DateTime date = DateFormat.jm().parse(task.startTime.toString());
-            var myTime = DateFormat("HH:mm").format(date);
-            notificationService.scheduleNotification(
-              hour: int.parse(myTime.toString().split(":")[0]),
-              minutes: int.parse(myTime.toString().split(":")[1]),
-              task: task
-            );
-            return AnimationConfiguration.staggeredList(
-                position: index,
-                child: SlideAnimation(
-                    child: FadeInAnimation(
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.bottomSheet(
-                                    Container(
-                                      padding: const EdgeInsets.only(top: 1),
-                                      height: task.isCompleted == 1
-                                          ? MediaQuery.of(context).size.height * 0.30
-                                          : MediaQuery.of(context).size.height * 0.37,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(25),
-                                          topRight: Radius.circular(25),
-                                        ),
-                                        color: Get.isDarkMode ? darkGreyColor : whiteColor,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: 6, width: 120,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.rectangle,
-                                                borderRadius: BorderRadius.circular(10),
-                                                color: Get.isDarkMode ? Colors.grey[600]
-                                                    : Colors.grey[300])),
-                                          const SizedBox(height: 20),
-                                          task.isCompleted == 1 ? Container()
-                                              : _bottomButton(
-                                              label: 'Task Completed',
-                                              onTap: () => {
-                                                _taskController.markTaskCompleted
-                                                  (task.id!),
-                                                Get.back()
-                                              }, color: primaryColor,
-                                              context: context),
-                                          const SizedBox(height: 2),
-                                          _bottomButton(
-                                              label: 'Delete Task',
-                                              onTap: () => {
-                                                _taskController.delete(task),
-                                                setState(() {}),
-                                                Get.back()
-                                              },
-                                              color: Colors.red[300]!,
-                                              context: context),
-                                          const SizedBox(height: 10),
-                                          _bottomButton(
-                                              label: 'Close',
-                                              onTap: () => Get.back(),
-                                              color: Colors.red[300]!,
-                                              isClosed: true,
-                                              context: context),
-                                          const SizedBox(
-                                            height: 15,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                );
-                              },
-                              child: TaskTile(task: task),
-                            )
-                          ],
-                        ))));
-          }
-          if(task.date == DateFormat.yMd().format(_selectedDate)) {
-            return AnimationConfiguration.staggeredList(
-                position: index,
-                child: SlideAnimation(
-                    child: FadeInAnimation(
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.bottomSheet(
-                                    Container(
-                                      padding: const EdgeInsets.only(top: 4),
-                                      height: task.isCompleted == 1
-                                          ? MediaQuery.of(context).size.height * 0.25
-                                          : MediaQuery.of(context).size.height * 0.35,
-                                      color: Get.isDarkMode ? darkGreyColor : whiteColor,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: 6,
-                                            width: 120,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                color: Get.isDarkMode ? Colors.grey[600] : Colors.grey[300]
+    return _taskController.taskList.isEmpty ? showNoTasks() :
+    SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          itemCount: _taskController.taskList.length,
+          itemBuilder: (context, index) {
+            Task task = _taskController.taskList[index];
+            if(task.repeat == 'Daily') {
+              DateTime date = DateFormat.jm().parse(task.startTime!.trim());
+              var myTime = DateFormat("HH:mm").format(date);
+              notificationService.scheduleNotification(
+                  hour: int.parse(myTime.trim().toString().split(":")[0]),
+                  minutes: int.parse(myTime.trim().toString().split(":")[1]),
+                  task: task
+              );
+              return
+                  AnimationConfiguration.staggeredList(
+                      duration: const Duration(seconds: 3),
+                      delay: const Duration(seconds: 1),
+                      position: index,
+                      child: SlideAnimation(
+                          //horizontalOffset: 70,
+                          verticalOffset: 50,
+                          child: FadeInAnimation(
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.bottomSheet(
+                                        Container(
+                                          padding: const EdgeInsets.only(top: 1),
+                                          height: task.isCompleted == 1
+                                              ? MediaQuery.of(context).size.height * 0.30
+                                              : MediaQuery.of(context).size.height * 0.37,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(25),
+                                              topRight: Radius.circular(25),
                                             ),
+                                            color: Get.isDarkMode ? darkGreyColor : whiteColor,
                                           ),
-                                          const Spacer(),
-                                          task.isCompleted == 1 ? Container()
-                                              : _bottomButton(
-                                              label: 'Task Completed',
-                                              onTap: () => {
-                                                _taskController.markTaskCompleted
-                                                  (task.id!),
-                                                Get.back()
-                                              }, color: primaryColor,
-                                              context: context),
-                                          const SizedBox(
-                                            height: 2,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                  height: 6, width: 120,
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.rectangle,
+                                                      borderRadius: BorderRadius.circular(10),
+                                                      color: Get.isDarkMode ? Colors.grey[600]
+                                                          : Colors.grey[300])),
+                                              const SizedBox(height: 20),
+                                              task.isCompleted == 1 ? Container()
+                                                  : bottomButton(
+                                                  label: 'Task Completed',
+                                                  onTap: () => {
+                                                    _taskController.markTaskCompleted
+                                                      (task.id!),
+                                                    Get.back()
+                                                  }, color: primaryColor,
+                                                  context: context),
+                                              const SizedBox(height: 2),
+                                              bottomButton(
+                                                  label: 'Delete Task',
+                                                  onTap: () => {
+                                                    _taskController.delete(task),
+                                                    Get.back(),
+                                                    Get.to(() => const HomePage()),
+                                                    setState(() {}),
+                                                  },
+                                                  color: Colors.red[300]!,
+                                                  context: context),
+                                              const SizedBox(height: 10),
+                                              bottomButton(
+                                                  label: 'Close',
+                                                  onTap: () => Get.back(),
+                                                  color: Colors.red[300]!,
+                                                  isClosed: true,
+                                                  context: context),
+                                              const SizedBox(
+                                                height: 15,
+                                              )
+                                            ],
                                           ),
-                                          _bottomButton(
-                                              label: 'Delete Task',
-                                              onTap: () => {
-                                                _taskController.delete(task),
-                                                Get.back()
-                                              },
-                                              color: Colors.red[300]!,
-                                              context: context),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          _bottomButton(
-                                              label: 'Close',
-                                              onTap: () => {
-                                                Get.back()
-                                              }, color: Colors.red[300]!,
-                                              isClosed: true,
-                                              context: context),
-                                          const SizedBox(
-                                            height: 15,
-                                          )
-                                        ],
-                                      ),
-                                    ));
-                              },
-                              child: TaskTile(task: task),
-                            )
-                          ],
-                        ))));
-          } else {
-            return Container();
-          }
-        })));
-  }
-  _showNoTasks() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 200),
-      child: Column(
-        children: [
-          Icon(Icons.task, size: 80,
-            color: Get.isDarkMode ? bluishColor.withOpacity(0.8) : bluishColor,),
-          Text('You do not have any tasks yet!',
-            style: GoogleFonts.portLligatSlab(textStyle: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-                color: Get.isDarkMode ? Colors.grey[400] : Colors.grey
-            )),),
-          Text('Add new tasks to make your days productive.',
-            style: GoogleFonts.portLligatSlab(textStyle: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-                color: Get.isDarkMode ? Colors.grey[400] : Colors.grey
-            )),)
-        ],
-      ),
-    );
-  }
-  _developerInfo() {
-    return Column(
-      children: [
-        Text('Developed by Emmy',
-        style: GoogleFonts.amita(
-          textStyle: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1
-          )
-        ),),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Text('+2348140087091',
-          style: GoogleFonts.amita(
-            textStyle: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1
-          ),)),
-        )
-      ],
-    );
-  }
-
-  _bottomButton({
-    required String label,
-    required Function() onTap,
-    required Color color,
-    bool isClosed = false,
-    required BuildContext context
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        height: 55,
-        width: MediaQuery.of(context).size.width * 0.9,
-        decoration: BoxDecoration(
-            color: isClosed == true ? Colors.transparent : color,
-            border: Border.all(
-              width: 2,
-              color: isClosed == true ? Get.isDarkMode ? Colors.grey[600]!
-                  : Colors.grey[300]! : color,
-            ),
-            borderRadius: BorderRadius.circular(20)
-        ),
-        child: Center(child:
-        Text(label, style: isClosed ? titleStyle : titleStyle.copyWith(color: Colors.white),)),
-      ),
+                                        ),
+                                      );
+                                    },
+                                    child: TaskTile(task: task),
+                                  )
+                                ],
+                              ))));
+            }
+            if(task.date == DateFormat.yMd().format(_selectedDate)) {
+              return AnimationConfiguration.staggeredList(
+                  duration: const Duration(seconds: 3),
+                  delay: const Duration(seconds: 1),
+                  position: index,
+                  child: SlideAnimation(
+                     verticalOffset: 50,
+                       //horizontalOffset: 70,
+                      child: FadeInAnimation(
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Get.bottomSheet(
+                                      Container(
+                                        padding: const EdgeInsets.only(top: 4),
+                                        height: task.isCompleted == 1
+                                            ? MediaQuery.of(context).size.height * 0.25
+                                            : MediaQuery.of(context).size.height * 0.35,
+                                        color: Get.isDarkMode ? darkGreyColor : whiteColor,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 6,
+                                              width: 120,
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: Get.isDarkMode ? Colors.grey[600] : Colors.grey[300]
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            task.isCompleted == 1 ? Container()
+                                                : bottomButton(
+                                                label: 'Task Completed',
+                                                onTap: () => {
+                                                  _taskController.markTaskCompleted
+                                                    (task.id!),
+                                                  Get.back()
+                                                }, color: primaryColor,
+                                                context: context),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            bottomButton(
+                                                label: 'Delete Task',
+                                                onTap: () => {
+                                                  _taskController.delete(task),
+                                                  Get.back(),
+                                                  Get.to(() => const HomePage()),
+                                                  setState(() {}),
+                                                },
+                                                color: Colors.red[300]!,
+                                                context: context),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            bottomButton(
+                                                label: 'Close',
+                                                onTap: () => {
+                                                  Get.back()
+                                                }, color: Colors.red[300]!,
+                                                isClosed: true,
+                                                context: context),
+                                            const SizedBox(
+                                              height: 15,
+                                            )
+                                          ],
+                                        ),
+                                      ));
+                                },
+                                child: TaskTile(task: task),
+                              )
+                            ],
+                          ))));
+            } else {
+              return Container();
+            }
+          }),
     );
   }
 }

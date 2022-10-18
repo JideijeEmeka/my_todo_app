@@ -8,3 +8,4 @@ const Color blackColor = Colors.black;
 const Color primaryColor = bluishColor;
 const Color darkGreyColor = Color(0xFF121212);
 const Color darkHeaderColor = Color(0xFF424242);
+const Color purpleColor = Color(0xFFA020F0);
