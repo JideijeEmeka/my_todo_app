@@ -149,8 +149,12 @@ class _HomePageState extends State<HomePage> {
               );
               return
                   AnimationConfiguration.staggeredList(
+                      duration: const Duration(seconds: 3),
+                      delay: const Duration(seconds: 1),
                       position: index,
                       child: SlideAnimation(
+                          //horizontalOffset: 70,
+                          verticalOffset: 50,
                           child: FadeInAnimation(
                               child: Row(
                                 children: [
@@ -221,11 +225,12 @@ class _HomePageState extends State<HomePage> {
             }
             if(task.date == DateFormat.yMd().format(_selectedDate)) {
               return AnimationConfiguration.staggeredList(
-                  duration: const Duration(seconds: 4),
+                  duration: const Duration(seconds: 3),
                   delay: const Duration(seconds: 1),
                   position: index,
                   child: SlideAnimation(
-                    verticalOffset: 50,
+                     verticalOffset: 50,
+                       //horizontalOffset: 70,
                       child: FadeInAnimation(
                           child: Row(
                             children: [

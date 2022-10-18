@@ -134,7 +134,7 @@ class _AddTaskState extends State<AddTask> {
           repeat: _selectedRepeat
       )
     );
-    debugPrint('My id is: $value');
+    debugPrint('A new task added: $value');
   }
 
   @override
@@ -257,7 +257,7 @@ class _AddTaskState extends State<AddTask> {
         Text('Color', style: titleStyle,),
         const SizedBox(height: 8,),
         Wrap(
-          children: List<Widget>.generate(3, (index) {
+          children: List<Widget>.generate(5, (index) {
             return GestureDetector(
               onTap: () {
                 setState(() {
@@ -271,7 +271,9 @@ class _AddTaskState extends State<AddTask> {
                   radius: 14,
                   backgroundColor: index == 0 ? primaryColor
                       : index == 1 ? pinkishColor
-                      : yellowishColor,
+                      : index == 2 ? yellowishColor
+                      : index == 3 ? blackColor
+                      : purpleColor,
                   child: _selectedColor == index ? const Icon(Icons.done, size: 16,
                     color: whiteColor,) : Container(),
                 ),
