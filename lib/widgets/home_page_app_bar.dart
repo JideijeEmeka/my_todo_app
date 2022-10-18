@@ -35,16 +35,13 @@ PreferredSizeWidget homePageAppBar(BuildContext context) {
           color: Get.isDarkMode ? Colors.white: Colors.black,),
       ),
     ),
-    actions: [
+    actions: const [
       Padding(
-        padding: const EdgeInsets.only(right: 20, top: 15),
-        child: InkWell(
-          onTap: () => Get.to(() => const NotifiedPage(label: 'label')),
-          child: const CircleAvatar(
+        padding: EdgeInsets.only(right: 20, top: 15),
+        child: CircleAvatar(
             radius: 19,
             backgroundColor: bluishColor,
             backgroundImage: NetworkImage(profilePicUrl),
-          ),
         ),
       ),
     ],
