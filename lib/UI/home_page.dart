@@ -11,8 +11,10 @@ import 'package:my_todo_app/models/task.dart';
 import 'package:my_todo_app/services/notification_service.dart';
 import 'package:my_todo_app/themes/app_colors.dart';
 import 'package:my_todo_app/themes/app_theme.dart';
+import 'package:my_todo_app/widgets/bottom_button_widget.dart';
 import 'package:my_todo_app/widgets/button_widget.dart';
 import 'package:my_todo_app/widgets/home_page_app_bar.dart';
+import 'package:my_todo_app/widgets/show_no_tasks.dart';
 import 'package:my_todo_app/widgets/task_tile_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -128,7 +130,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
   _showTasks() {
-    return _taskController.taskList.isEmpty ? _showNoTasks() :
+    return _taskController.taskList.isEmpty ? showNoTasks() :
     SizedBox(
       height: MediaQuery.of(context).size.height,
       child: ListView.builder(
@@ -178,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                                                           : Colors.grey[300])),
                                               const SizedBox(height: 20),
                                               task.isCompleted == 1 ? Container()
-                                                  : _bottomButton(
+                                                  : bottomButton(
                                                   label: 'Task Completed',
                                                   onTap: () => {
                                                     _taskController.markTaskCompleted
@@ -187,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                                                   }, color: primaryColor,
                                                   context: context),
                                               const SizedBox(height: 2),
-                                              _bottomButton(
+                                              bottomButton(
                                                   label: 'Delete Task',
                                                   onTap: () => {
                                                     _taskController.delete(task),
@@ -198,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                                                   color: Colors.red[300]!,
                                                   context: context),
                                               const SizedBox(height: 10),
-                                              _bottomButton(
+                                              bottomButton(
                                                   label: 'Close',
                                                   onTap: () => Get.back(),
                                                   color: Colors.red[300]!,
@@ -248,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             const Spacer(),
                                             task.isCompleted == 1 ? Container()
-                                                : _bottomButton(
+                                                : bottomButton(
                                                 label: 'Task Completed',
                                                 onTap: () => {
                                                   _taskController.markTaskCompleted
@@ -259,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                                             const SizedBox(
                                               height: 2,
                                             ),
-                                            _bottomButton(
+                                            bottomButton(
                                                 label: 'Delete Task',
                                                 onTap: () => {
                                                   _taskController.delete(task),
@@ -272,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            _bottomButton(
+                                            bottomButton(
                                                 label: 'Close',
                                                 onTap: () => {
                                                   Get.back()
@@ -294,57 +296,6 @@ class _HomePageState extends State<HomePage> {
               return Container();
             }
           }),
-    );
-  }
-  _showNoTasks() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 200),
-      child: Column(
-        children: [
-          Icon(Icons.task, size: 80,
-            color: Get.isDarkMode ? bluishColor.withOpacity(0.8) : bluishColor,),
-          Text('You do not have any tasks yet!',
-            style: GoogleFonts.portLligatSlab(textStyle: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-                color: Get.isDarkMode ? Colors.grey[400] : Colors.grey
-            )),),
-          Text('Add new tasks to make your days productive.',
-            style: GoogleFonts.portLligatSlab(textStyle: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-                color: Get.isDarkMode ? Colors.grey[400] : Colors.grey
-            )),)
-        ],
-      ),
-    );
-  }
-
-  _bottomButton({
-    required String label,
-    required Function() onTap,
-    required Color color,
-    bool isClosed = false,
-    required BuildContext context
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        height: 55,
-        width: MediaQuery.of(context).size.width * 0.9,
-        decoration: BoxDecoration(
-            color: isClosed == true ? Colors.transparent : color,
-            border: Border.all(
-              width: 2,
-              color: isClosed == true ? Get.isDarkMode ? Colors.grey[600]!
-                  : Colors.grey[300]! : color,
-            ),
-            borderRadius: BorderRadius.circular(20)
-        ),
-        child: Center(child:
-        Text(label, style: isClosed ? titleStyle : titleStyle.copyWith(color: Colors.white),)),
-      ),
     );
   }
 }
