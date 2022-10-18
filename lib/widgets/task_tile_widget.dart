@@ -76,6 +76,10 @@ class TaskTile extends StatelessWidget {
          return pinkishColor;
        case 2:
          return yellowishColor;
+       case 3:
+         return blackColor;
+       case 4:
+         return purpleColor;
        default:
          return bluishColor;
      }
