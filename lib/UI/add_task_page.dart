@@ -239,7 +239,6 @@ class _AddTaskState extends State<AddTask> {
                       child: CircularProgressIndicator()) :
                   MyButton(label: 'Create Task', onPressed: () => {
                     _validateDate(),
-                    // Get.to(const NotifiedPage(label: 'Obi'));
                   })
                 ],
               ),
