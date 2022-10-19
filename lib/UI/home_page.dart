@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
             ],),
           MyButton(label: '+ Add task', onPressed: () async =>
           {
-            await Get.to(const AddTask()),
+            await Get.to(() => const AddTask()),
             _taskController.getTasks()
           })
         ],),
@@ -149,8 +149,8 @@ class _HomePageState extends State<HomePage> {
               );
               return
                   AnimationConfiguration.staggeredList(
-                      duration: const Duration(seconds: 3),
-                      delay: const Duration(seconds: 1),
+                      duration: const Duration(seconds: 2),
+                      delay: const Duration(milliseconds: 500),
                       position: index,
                       child: SlideAnimation(
                           //horizontalOffset: 70,
@@ -225,8 +225,8 @@ class _HomePageState extends State<HomePage> {
             }
             if(task.date == DateFormat.yMd().format(_selectedDate)) {
               return AnimationConfiguration.staggeredList(
-                  duration: const Duration(seconds: 3),
-                  delay: const Duration(seconds: 1),
+                  duration: const Duration(seconds: 2),
+                  delay: const Duration(milliseconds: 500),
                   position: index,
                   child: SlideAnimation(
                      verticalOffset: 50,
